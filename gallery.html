@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | Levon's Piano Service</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-900">
+
+    <header class="bg-white shadow-md">
+        <div class="max-w-6xl mx-auto flex justify-between items-center p-6">
+            <!-- Logo / Brand -->
+            <h1>
+                <a href="index.html" class="text-2xl font-bold text-gray-800 hover:text-amber-700">
+                    Levon's Piano Service
+                </a>
+            </h1>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex space-x-6 text-lg font-medium">
+                <a href="/index.html#about" class="text-gray-700 hover:text-amber-700">About</a>
+                <a href="/index.html#services" class="text-gray-700 hover:text-amber-700">Services</a>
+                <a href="/gallery.html" class="text-gray-700 hover:text-amber-700">Gallery</a>
+                <a href="/index.html#contact" class="text-gray-700 hover:text-amber-700">Contact</a>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-btn" class="md:hidden focus:outline-none text-gray-800 hover:text-amber-700">
+                <!-- Hamburger Icon -->
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Nav -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+            <nav class="flex flex-col px-6 py-4 space-y-4 text-lg font-medium">
+                <a href="/index.html#about" class="text-gray-700 hover:text-amber-700">About</a>
+                <a href="/index.html#services" class="text-gray-700 hover:text-amber-700">Services</a>
+                <a href="/gallery.html" class="text-gray-700 hover:text-amber-700">Gallery</a>
+                <a href="/index.html#contact" class="text-gray-700 hover:text-amber-700">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <script>
+        // Toggle mobile menu
+        document.getElementById("menu-btn").addEventListener("click", function () {
+            document.getElementById("mobile-menu").classList.toggle("hidden");
+        });
+    </script>
+
+
+    <!-- Gallery Section -->
+    <main class="max-w-6xl mx-auto px-6 py-16">
+        <h1 class="text-4xl font-serif font-bold text-center mb-12">Piano Gallery</h1>
+        <div id="gallery-grid" class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Cards will be injected here -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white shadow-inner">
+        <div class="max-w-6xl mx-auto text-center p-6 text-lg text-gray-700">
+            &copy; <span id="year"></span> Levon's Piano Service. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // set the current year dynamically
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+
+    <script>
+        async function loadGallery() {
+            const resp = await fetch("gallery.json");
+            const data = await resp.json();
+            const grid = document.getElementById("gallery-grid");
+
+            grid.innerHTML = data.map(piano => `
+        <a href="piano.html?id=${piano.id}" class="group block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1">
+          <div class="h-64 w-full overflow-hidden">
+            <img src="../${piano.images[0]}" alt="${piano.title}" 
+                 class="h-full w-full object-cover group-hover:scale-105 transition duration-300">
+          </div>
+          <div class="p-5">
+            <h2 class="text-xl font-semibold text-gray-900 mb-2 group-hover:text-amber-700">${piano.title}</h2>
+          </div>
+        </a>
+      `).join("");
+        }
+
+        loadGallery();
+    </script>
+</body>
+
+</html>

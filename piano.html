@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading... | Levon's Piano Service</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    <style>
+        /* Custom navigation buttons */
+        .custom-next,
+        .custom-prev {
+            color: white;
+            background-color: rgba(0, 0, 0, 0.6);
+            width: 48px;
+            height: 48px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color .2s ease;
+        }
+
+        .custom-next:hover,
+        .custom-prev:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900">
+
+    <header class="bg-white shadow-md">
+        <div class="max-w-6xl mx-auto flex justify-between items-center p-6">
+            <!-- Logo / Brand -->
+            <h1>
+                <a href="index.html" class="text-2xl font-bold text-gray-800 hover:text-amber-700">
+                    Levon's Piano Service
+                </a>
+            </h1>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex space-x-6 text-lg font-medium">
+                <a href="/index.html#about" class="text-gray-700 hover:text-amber-700">About</a>
+                <a href="/index.html#services" class="text-gray-700 hover:text-amber-700">Services</a>
+                <a href="/gallery.html" class="text-gray-700 hover:text-amber-700">Gallery</a>
+                <a href="/index.html#contact" class="text-gray-700 hover:text-amber-700">Contact</a>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-btn" class="md:hidden focus:outline-none text-gray-800 hover:text-amber-700">
+                <!-- Hamburger Icon -->
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Nav -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+            <nav class="flex flex-col px-6 py-4 space-y-4 text-lg font-medium">
+                <a href="/index.html#about" class="text-gray-700 hover:text-amber-700">About</a>
+                <a href="/index.html#services" class="text-gray-700 hover:text-amber-700">Services</a>
+                <a href="/gallery.html" class="text-gray-700 hover:text-amber-700">Gallery</a>
+                <a href="/index.html#contact" class="text-gray-700 hover:text-amber-700">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <script>
+        // Toggle mobile menu
+        document.getElementById("menu-btn").addEventListener("click", function () {
+            document.getElementById("mobile-menu").classList.toggle("hidden");
+        });
+    </script>
+
+
+    <!-- Piano Detail -->
+    <main id="piano-detail" class="max-w-5xl mx-auto px-6 py-16 text-center">
+        <!-- Populated by JS -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white shadow-inner">
+        <div class="max-w-6xl mx-auto text-center p-6 text-lg text-gray-700">
+            &copy; <span id="year"></span> Levon's Piano Service. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // set the current year dynamically
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script>
+        async function loadPiano() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get("id");
+            const resp = await fetch("gallery.json");
+            const data = await resp.json();
+            const piano = data.find(p => p.id === id);
+
+            if (!piano) {
+                document.title = "Not Found | Levon's Piano Service";
+                document.getElementById("piano-detail").innerHTML =
+                    "<p class='text-xl text-red-600'>Piano not found.</p>";
+                return;
+            }
+
+            // Update page title dynamically
+            document.title = `${piano.title} | Levon's Piano Service`;
+
+            // Build HTML
+            let html = `
+        <h1 class="text-4xl font-serif font-bold mb-4">${piano.title}</h1>
+        <p class="text-lg text-gray-600 mb-2">Built in: ${piano.year}</p>
+
+        <!-- Main Swiper -->
+        <div class="swiper mainSwiper mb-6">
+          <div class="swiper-wrapper">
+            ${piano.images.map(img => `
+              <div class="swiper-slide">
+                <img src="../${img}" class="rounded-lg shadow-md w-full object-contain">
+              </div>`).join("")}
+          </div>
+          <div class="swiper-button-next custom-next"></div>
+          <div class="swiper-button-prev custom-prev"></div>
+        </div>
+
+        <!-- Thumbnail Swiper -->
+        <div class="swiper thumbSwiper mt-4">
+          <div class="swiper-wrapper">
+            ${piano.images.map(img => `
+              <div class="swiper-slide w-24 h-24">
+                <img src="../${img}" class="w-full h-full object-cover rounded-md">
+              </div>`).join("")}
+          </div>
+        </div>
+
+        <p class="text-lg md:text-xl text-gray-700 leading-relaxed mt-10">${piano.description}</p>
+      `;
+
+            document.getElementById("piano-detail").innerHTML = html;
+
+            // Init thumbnails
+            const thumbSwiper = new Swiper(".thumbSwiper", {
+                spaceBetween: 10,
+                slidesPerView: 5,
+                freeMode: true,
+                watchSlidesProgress: true,
+            });
+
+            // Init main swiper linked to thumbnails
+            const mainSwiper = new Swiper(".mainSwiper", {
+                loop: true,
+                navigation: {
+                    nextEl: ".custom-next",
+                    prevEl: ".custom-prev",
+                },
+                thumbs: {
+                    swiper: thumbSwiper,
+                },
+            });
+        }
+
+        loadPiano();
+    </script>
+</body>
+
+</html>
