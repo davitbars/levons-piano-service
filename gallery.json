@@ -12,7 +12,8 @@
       "images/gallery/87804-Steinway C/87804-4.JPG",
       "images/gallery/87804-Steinway C/87804-5.JPG",
       "images/gallery/87804-Steinway C/87804-7.JPG"
-    ]
+    ],
+    "audio": "/images/Audio Clips/steinway gold.mp3"
   },
   {
     "id": "244555",
@@ -34,7 +35,9 @@
       "images/gallery/244555-Steinway L/244555-g.JPG",
       "images/gallery/244555-Steinway L/244555-h.JPG",
       "images/gallery/244555-Steinway L/244555-i.JPG"
-    ]
+    ],
+    "audio": "/images/Audio Clips/Steinway Model L grand.mp3"
+
   },
   {
     "id": "13027",
@@ -67,7 +70,9 @@
       "images/gallery/75846-BECHSTEIN/75846-7.JPG",
       "images/gallery/75846-BECHSTEIN/75846-8.JPG",
       "images/gallery/75846-BECHSTEIN/75846-10.JPG"
-    ]
+    ],
+    "audio": "/images/Audio Clips/Bechstein.mp3"
+
   },
   {
     "id": "169849",
@@ -93,6 +98,8 @@
       "images/gallery/799522-Kawaii/799522-3.JPG",
       "images/gallery/799522-Kawaii/799522-4.JPG",
       "images/gallery/799522-Kawaii/799522-5.jpg"
-    ]
+    ],
+    "audio": "/images/Audio Clips/Kawaii Grand.mp3"
+
   }
 ]

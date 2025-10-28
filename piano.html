@@ -92,6 +92,31 @@
         // set the current year dynamically
         document.getElementById("year").textContent = new Date().getFullYear();
     </script>
+    <script>
+  const audio = document.getElementById('pianoAudio');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const timeDisplay = document.getElementById('timeDisplay');
+
+  // Play/Pause functionality
+  playPauseBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play();
+      playPauseBtn.textContent = 'Stop';
+    } else {
+      audio.pause();
+      playPauseBtn.textContent = 'Start';
+    }
+  });
+
+  // Update time display
+  audio.addEventListener('timeupdate', () => {
+    const minutes = Math.floor(audio.currentTime / 60);
+    const seconds = Math.floor(audio.currentTime % 60)
+      .toString()
+      .padStart(2, '0');
+    timeDisplay.textContent = `${minutes}:${seconds}`;
+  });
+</script>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script>
@@ -139,7 +164,15 @@
               </div>`).join("")}
           </div>
         </div>
+        <audio id="pianoAudio">
+            <source src="${piano.audio}" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
 
+        <div>
+            <button id="playPauseBtn">Start</button>
+            <span id="timeDisplay">0:00</span>
+        </div>
         <p class="text-lg md:text-xl text-gray-700 leading-relaxed mt-10">${piano.description}</p>
       `;
 
